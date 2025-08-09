@@ -107,3 +107,5 @@ It’s not just code; it’s a personal productivity hack that turns the overwhe
 ## Why I Built This
 
 Procrastination isn’t just a problem, it’s a signal that the way work is presented to me isn’t motivating. By moving assignments into Microsoft To Do, where I get visual reminders and satisfaction from crossing things off, I trick my brain into starting and staying on track. This isn’t just tech, it’s a personal ecosystem to turn intention into action.
+
+![Workflow](/flowchart.png)

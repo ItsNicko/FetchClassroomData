@@ -1,0 +1,401 @@
+{
+  "name": "ToDo Auto Classroom",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "### 1) Schedule trigger  \n* Set it to run every 5 minutes.  \n* This keeps everything updated without manual input.\n",
+        "height": 496,
+        "width": 288,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -512,
+        -144
+      ],
+      "typeVersion": 1,
+      "id": "94539ad2-fcb9-4607-bad7-ee617e368ae5",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "### 2) Get rows from Google Sheets  \n* Pull all assignment rows added via Apps Script.  \n* Make sure your sheet has headers so n8n can read them properly.\n",
+        "height": 496,
+        "width": 288,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -224,
+        -144
+      ],
+      "typeVersion": 1,
+      "id": "4f084f2b-3d81-4dff-b370-936c5c76fd35",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "### 3) Filter unsynced assignments  \n* Use an IF node to check if the **\"Synced\"** column is empty.  \n* Only pass rows where **Synced** has no value (is blank).\n",
+        "height": 496,
+        "width": 288,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        64,
+        -144
+      ],
+      "typeVersion": 1,
+      "id": "e593250e-0caa-4c33-a59b-8b2c774c1eb6",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "### 4) Mark assignment as synced  \n* Use an **Update Sheet Row** node.  \n* Set the **\"Synced\"** column to `YES` for the current row after sending it to the assistant.\n",
+        "height": 496,
+        "width": 288,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        352,
+        -144
+      ],
+      "typeVersion": 1,
+      "id": "dcc14282-8d72-40cf-bdf1-20e0d84e79ce",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "### 5) Create Microsoft To Do task  \n* Use the assignment name from the **Update Sheet Row** node.  \n* Add it as a new task in Microsoft To Do.  \n* (Optional: Set due date, category, or notes if your sheet has that info.)\n",
+        "height": 496,
+        "width": 288,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        640,
+        -144
+      ],
+      "typeVersion": 1,
+      "id": "fa4674f1-f6e5-4904-9508-55120ada7d86",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -416,
+        160
+      ],
+      "id": "96ca6555-ffe5-4f23-9168-17d763533d00",
+      "name": "Trigger - Every 5 Min"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1tNGH90IDMUWxT_QLQCQtRTYcKGZI-_etk4tk6oq4PmQ",
+          "mode": "list",
+          "cachedResultName": "n8n classroom",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1tNGH90IDMUWxT_QLQCQtRTYcKGZI-_etk4tk6oq4PmQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1tNGH90IDMUWxT_QLQCQtRTYcKGZI-_etk4tk6oq4PmQ/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        -128,
+        160
+      ],
+      "id": "233d08fb-4ec3-40ac-8436-95123d42bc04",
+      "name": "Sheets - Get Assignments",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "D7V5X1okR4G5n4xQ",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "ac65f72e-07b6-4804-8ccc-5d3acbb17a62",
+              "leftValue": "={{ $json.Synced }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        144,
+        160
+      ],
+      "id": "86f8ab4b-0211-4df1-9e29-0d794e45462f",
+      "name": "If - Check Synced Status"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1tNGH90IDMUWxT_QLQCQtRTYcKGZI-_etk4tk6oq4PmQ",
+          "mode": "list",
+          "cachedResultName": "n8n classroom",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1tNGH90IDMUWxT_QLQCQtRTYcKGZI-_etk4tk6oq4PmQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1tNGH90IDMUWxT_QLQCQtRTYcKGZI-_etk4tk6oq4PmQ/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Synced": "YES",
+            "Assignment": "={{ $json.Assignment }}"
+          },
+          "matchingColumns": [
+            "Assignment"
+          ],
+          "schema": [
+            {
+              "id": "Class Teacher",
+              "displayName": "Class Teacher",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Assignment",
+              "displayName": "Assignment",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Due Date",
+              "displayName": "Due Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Synced",
+              "displayName": "Synced",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        448,
+        144
+      ],
+      "id": "7cb28ecb-eadf-466b-a587-102809d9f717",
+      "name": "Sheets - Update Synced Yes",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "D7V5X1okR4G5n4xQ",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "taskListId": "AQMkADAwATM3ZmYAZS0yMWZiLTFjNDctMDACLTAwCgAuAAADbqWiroLa50WemVv4suFMAgEAkEgrQXGMnUCRCXEpBbkIggAFbZA3ZAAAAA==",
+        "title": "={{ $json.Assignment }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.microsoftToDo",
+      "typeVersion": 1,
+      "position": [
+        736,
+        144
+      ],
+      "id": "29b41249-0351-4ccc-9162-fe9a3355106d",
+      "name": "ToDo - Create Task",
+      "credentials": {
+        "microsoftToDoOAuth2Api": {
+          "id": "Q2CiAoT52tklC5ui",
+          "name": "Microsoft To Do account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "### 📌 **Google Apps Script**  \n> This script grabs assignments from Google Classroom and writes them into your Google Sheet.  \n> It includes columns like:  \n> • Class Teacher  \n> • Assignment Name  \n> • Due Date  \n> • Status  \n> • Synced (left blank by default)  \n>  \n> The n8n flow picks up from here to automate the rest.\n",
+        "height": 496,
+        "width": 288,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -224,
+        -640
+      ],
+      "typeVersion": 1,
+      "id": "e738d4f4-62ae-4900-a17e-444c9cf5e500",
+      "name": "Sticky Note5"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Trigger - Every 5 Min": {
+      "main": [
+        [
+          {
+            "node": "Sheets - Get Assignments",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sheets - Get Assignments": {
+      "main": [
+        [
+          {
+            "node": "If - Check Synced Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If - Check Synced Status": {
+      "main": [
+        [
+          {
+            "node": "Sheets - Update Synced Yes",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Sheets - Update Synced Yes": {
+      "main": [
+        [
+          {
+            "node": "ToDo - Create Task",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "20b1025a-2f96-4e75-b712-e13dea6008bb",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "c15717124072b3f6fe5271f62b3917aaaa52da03c15f78fb1cd26b4b92bfb3e6"
+  },
+  "id": "P5iUTTjLIUCbLUZh",
+  "tags": [
+    {
+      "createdAt": "2025-08-05T01:09:46.294Z",
+      "updatedAt": "2025-08-05T01:09:46.294Z",
+      "id": "19YRGv6HVqR5jTLc",
+      "name": "sheets"
+    },
+    {
+      "createdAt": "2025-08-05T01:09:54.160Z",
+      "updatedAt": "2025-08-05T01:09:54.160Z",
+      "id": "5Ui7agybslJeQIzI",
+      "name": "Microsoft"
+    },
+    {
+      "createdAt": "2025-08-05T00:59:31.073Z",
+      "updatedAt": "2025-08-05T00:59:31.073Z",
+      "id": "HImGpGK0GLnOcaOf",
+      "name": "productivity"
+    },
+    {
+      "createdAt": "2025-08-05T01:10:02.149Z",
+      "updatedAt": "2025-08-05T01:10:02.149Z",
+      "id": "UR2hXd5TJ6qLsxtk",
+      "name": "ToDo"
+    }
+  ]
+}
